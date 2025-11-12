@@ -3,3 +3,6 @@ gtts
 gunicorn
 google-generativeai
 langchain
+pypdf
+langchain-community
+langchain-google-genai
