@@ -2,38 +2,38 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>AIVA - Web App</title>
-  <!-- ⭐️ CSS ทั้งหมดเหมือนเดิม (คัดลอกมาจากไฟล์เดิมของคุณ) -->
+  <title>AIVA - Vocational Assistant</title>
   <style>
     :root {
-      --logo-width: 80vw;
-      --tagline-size: 3rem;
-      --video-frame-width: 600px;
-      --video-frame-height: 900px;
-      --video-width: 550px;
-      --video-height: 850px;
-      --button-font-size: 2.9rem;
-      --button-width: 600px;
-      --button-height: 120px;
+      /* ⭐️ CSS ดีไซน์ใหม่ (จาก aiva_portal.html) ⭐️ */
+      --logo-width: 70vw;
+      --tagline-size: 2.7rem;
+      --video-frame-width: 490px;
+      --video-frame-height: 780px;
+      --video-width: 450px;
+      --video-height: 750px;
+      --button-font-size: 2.5rem;
+      --button-width: 400px;
+      --button-height: 110px;
       --button-radius: 18px;
       --button-border: 3px;
-      --mic-size: 150px;
-      --mic-font-size: 2.9rem;
+      --mic-size: 110px;
+      --mic-font-size: 2.5rem;
     }
     html { box-sizing: border-box; }
     *, *:before, *:after { box-sizing: inherit; }
     body {
       margin: 0;
-      min-height: 100vh;
-      min-width: 100vw;
+      min-height: 60vh;
+      min-width: 0vw;
       font-family: 'Kanit', Tahoma, Arial, sans-serif;
       background: url('{{ url_for("static", filename="bg.png") }}') no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
     .container {
-      width: 100vw;
-      min-height: 100vh;
+      width: 90vw;
+      min-height: 80vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -41,7 +41,7 @@
       z-index: 1;
     }
     .aiva-logo {
-      margin-top: 36px;
+      margin-top: 30px;
       width: var(--logo-width);
     }
     .aiva-tagline {
@@ -138,8 +138,8 @@
     }
     .mic-float {
       position: absolute;
-      left: 115%;
-      bottom: -250px;
+      left: 81%;
+      bottom: -200px;
       transform: translateX(-50%);
       margin: 0;
       display: flex;
@@ -168,8 +168,8 @@
       box-shadow: 0 0 48px #4adcf7cc;
     }
     .mic-btn-image:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+      opacity: 0.7;
+      cursor: not-allowed;
     }
     .mic-btn-image.active {
       background: radial-gradient(circle, #c6e4fc 0%, #99e8ff90 70%, #6146e7 100%);
@@ -192,8 +192,8 @@
       100% { transform: rotate(360deg);}
     }
     .mic-stop-btn {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       background: radial-gradient(circle at 60% 30%, #e96487 60%, #715de7 120%);
       border: none;
       border-radius: 50%;
@@ -323,6 +323,79 @@
       0%,100% { opacity: 1;}
       55% { opacity: 0.8;}
     }
+    /* ⭐️ CSS ใหม่สำหรับ Rating ⭐️ */
+    .smile-emoji-btn {
+      position: absolute;
+      top: 32px;
+      right: 5px;
+      font-size: 5.2rem;
+      cursor: pointer;
+      z-index: 25;
+      filter: drop-shadow(0 3px 10px #fff8);
+      transition: transform 0.15s;
+    }
+    .smile-emoji-btn:active { transform: scale(1.09); }
+    .rating-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30,50,110,0.22);
+      backdrop-filter: blur(12px);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .rating-overlay.active { display: flex; }
+    .rating-popup {
+      background: rgba(255,255,255,0.96);
+      border-radius: 32px;
+      box-shadow: 0 12px 40px #27298e38;
+      padding: 48px 40px 30px 40px;
+      min-width: 268px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .rating-title {
+      font-size: 2rem;
+      color: #2752be;
+      font-weight: bold;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 8px #b0CAFF24;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .rating-star {
+      font-size: 2.4rem;
+      cursor: pointer;
+      transition: color 0.19s, transform 0.13s;
+      color: #dde0e7;
+      filter: drop-shadow(0 2px 8px #3798f849);
+    }
+    .rating-star.active,
+    .rating-star:hover,
+    .rating-star.selected {
+      color: #ffc94a;
+      transform: scale(1.14);
+      filter: drop-shadow(0 2px 8px #F9BF36);
+    }
+    .rating-close {
+      padding: 8px 26px;
+      font-size: 1.2rem;
+      background: #205FCF;
+      color: #fff;
+      border-radius: 15px;
+      border: none;
+      margin-top: 2px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .rating-close:hover {
+      background: #3279ec;
+    }
     @media (max-width: 750px) {
       .main-content { flex-direction: column; align-items: center; }
       .video-and-speech { margin-right: 0;}
@@ -334,7 +407,10 @@
 <body>
   <div class="container">
     <img class="aiva-logo" src="{{ url_for('static', filename='logo01.png') }}" alt="AIVA Logo"/>
+    <!-- ⭐️ HTML ใหม่สำหรับ Rating ⭐️ -->
+    <div class="smile-emoji-btn" id="smile-btn" title="ให้คะแนน">😊</div>
     <div class="aiva-tagline">ผู้ช่วยอัจฉริยะเพื่อสังคมอาชีวะแห่งอนาคต</div>
+    
     <div class="main-content">
       <div class="video-and-speech">
         <div class="video-frame">
@@ -352,10 +428,12 @@
         </div>
       </div>
       <div class="right-panel">
+        
         <div class="actions">
           <button class="button-aiva">การรับสมัคร</button>
           <button class="button-aiva">หลักสูตร</button>
           <button class="button-aiva">อาชีพ</button>
+          
           <div class="mic-float mic-center">
             <button class="mic-btn-image" id="mic-btn" title="พูด">
               <img src="{{ url_for('static', filename='pu.png') }}" alt="Mic Wave" class="mic-img">
@@ -365,8 +443,9 @@
             </button>
           </div>
         </div>
-      </div>
+        </div>
     </div>
+    
     <div class="mic-loading-overlay" id="mic-loader">
       <div class="emoji-loader-wrap">
         <div class="emoji-bounce">
@@ -379,13 +458,43 @@
     </div>
   </div>
   
-  <!-- ⭐️ 1. เพิ่ม Audio Player ที่ซ่อนไว้ ⭐️ -->
-  <audio id="audio-player" style="display: none;"></audio>
+  <!-- ⭐️ HTML ใหม่สำหรับ Rating ⭐️ -->
+  <div class="rating-overlay" id="rating-overlay">
+    <div class="rating-popup">
+      <div class="rating-title">ให้คะแนนความพึงพอใจ</div>
+      <div class="rating-stars" id="rating-stars">
+        <span class="rating-star" data-value="1">★</span>
+        <span class="rating-star" data-value="2">★</span>
+        <span class="rating-star" data-value="3">★</span>
+        <span class="rating-star" data-value="4">★</span>
+        <span class="rating-star" data-value="5">★</span>
+      </div>
+      <button class="rating-close" id="rating-close">ปิด</button>
+    </div>
+  </div>
 
-  <!-- ⭐️⭐️ SCRIPT SECTION (Web App Logic) ⭐️⭐️ -->
+  <!-- ⭐️⭐️ SCRIPT SECTION (Web App Architecture) ⭐️⭐️ -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-      // ดึง element ที่ต้องใช้
+      // --- Web Speech API (สำหรับการฟังเสียงในเบราว์เซอร์) ---
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition = null;
+      
+      if (SpeechRecognition) {
+          recognition = new SpeechRecognition();
+          recognition.lang = 'th-TH';
+          recognition.continuous = false; // หยุดเมื่อพูดจบประโยค
+          recognition.interimResults = false; // เอาเฉพาะผลลัพธ์สุดท้าย
+      } else {
+          console.error("Web Speech API is not supported in this browser.");
+          // (อาจจะต้องซ่อนปุ่มไมค์ ถ้าไม่รองรับ)
+      }
+
+      // --- Audio Player (สำหรับการเล่นเสียงที่ส่งมาจาก Server) ---
+      let audioPlayer = new Audio(); // ⭐️ นี่คือตัวเล่น MP3 ของเรา
+      let currentAudioBlobUrl = null; // URL ของเสียงที่กำลังเล่น
+
+      // --- Elements ---
       const micBtn = document.getElementById('mic-btn');
       const stopBtn = document.getElementById('stop-btn');
       const loader = document.getElementById('mic-loader');
@@ -395,26 +504,13 @@
       const speechLive = document.getElementById('speech-live-text');
       const buttons = document.querySelectorAll('.button-aiva');
       
-      // ⭐️ 2. ดึง Audio Player
-      const audioPlayer = document.getElementById('audio-player');
-
-      // ⭐️ 3. ตั้งค่า Web Speech API (STT ฝั่ง Client)
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      let recognition = null;
-
-      if (SpeechRecognition) {
-          recognition = new SpeechRecognition();
-          recognition.lang = 'th-TH'; // ภาษาไทย
-          recognition.interimResults = false; // เอาเฉพาะผลลัพธ์สุดท้าย
-          recognition.maxAlternatives = 1;
-      } else {
-          console.error("Web Speech API is not supported in this browser.");
-          // ซ่อนปุ่มไมค์ถ้าใช้ไม่ได้
-          micBtn.style.display = 'none'; 
-      }
+      // ⭐️ Elements ใหม่สำหรับ Rating ⭐️
+      const smileBtn = document.getElementById('smile-btn');
+      const ratingOverlay = document.getElementById('rating-overlay');
+      const ratingClose = document.getElementById('rating-close');
+      const ratingStars = document.getElementById('rating-stars');
 
       // --- Helper Functions ---
-
       function showSpeechBox(status, text) {
           speechBox.style.display = "flex";
           speechStatus.textContent = status;
@@ -431,170 +527,230 @@
           micBtn.disabled = false;
           micBtn.classList.remove('active');
           loader.classList.remove('active');
-          
-          buttons.forEach(btn => {
-              btn.disabled = false;
-              btn.style.opacity = '1';
+          buttons.forEach(btn => btn.disabled = false);
+      }
+      
+      /**
+       * ⭐️ ฟังก์ชันใหม่: เล่นไฟล์เสียง MP3 ที่ได้รับจาก Server
+       */
+      function playAudioFromResponse(response) {
+          // 1. ดึง URL ของไฟล์เสียง (Blob)
+          response.blob().then(blob => {
+              // 2. ดึง Text คำตอบ (จาก Header ที่เราส่งมา)
+              // ⭐️ แก้ไข: ต้อง Decode URI Component
+              const answer = decodeURIComponent(window.atob(response.headers.get("X-Answer-Text") || ""));
+              const question = decodeURIComponent(window.atob(response.headers.get("X-Question-Text") || ""));
+
+              // 3. แสดงคำตอบ (Text) บนหน้าจอ
+              showSpeechBox(question, answer);
+              
+              // 4. สร้าง URL ชั่วคราวสำหรับไฟล์ MP3
+              const blobUrl = URL.createObjectURL(blob);
+              currentAudioBlobUrl = blobUrl; // เก็บ URL ไว้ (เผื่อต้องหยุด)
+              
+              // 5. สั่งให้ <audio> เล่นไฟล์นี้
+              audioPlayer.src = blobUrl;
+              audioPlayer.play();
           });
+          
+          // 6. เมื่อเสียงเล่นจบ
+          audioPlayer.onended = () => {
+              console.log("Audio finished playing.");
+              hideSpeechBox(); // ซ่อนกล่องข้อความ
+              if (currentAudioBlobUrl) {
+                  URL.revokeObjectURL(currentAudioBlobUrl); // คืนค่า Memory
+                  currentAudioBlobUrl = null;
+              }
+              // ⭐️ บอก Server ว่าเราเล่นจบแล้ว
+              fetch('/tts_finished_callback', { method: 'POST' }); 
+          };
+      }
+      
+      /**
+       * ⭐️ ฟังก์ชันใหม่: หยุดเสียงที่กำลังเล่น (Client-side)
+       */
+      async function stopSpeech() {
+          console.log("Stop button pressed.");
+          
+          // 1. หยุดการฟัง (ถ้ากำลังฟังอยู่)
+          if (recognition) {
+              recognition.stop();
+          }
+          
+          // 2. หยุดเสียงที่กำลังเล่น
+          if (!audioPlayer.paused) {
+              audioPlayer.pause();
+              audioPlayer.currentTime = 0;
+              if (currentAudioBlobUrl) {
+                  URL.revokeObjectURL(currentAudioBlobUrl);
+                  currentAudioBlobUrl = null;
+              }
+              // ⭐️ บอก Server ว่าเราหยุด
+              await fetch('/tts_finished_callback', { method: 'POST' });
+          }
+          
+          // 3. (ไม่จำเป็นต้องเรียก /stop_tts แล้ว เพราะเราหยุดเอง)
+          
+          // 4. Reset UI
+          resetUI();
+          hideSpeechBox();
       }
 
-      // --- Core Web App Functions ---
+      // --- API Call Functions (Web App Architecture) ---
 
       /**
-       * ⭐️ 4. ฟังก์ชันหลัก: ส่ง Text ไป Backend และรับไฟล์เสียง MP3 กลับมาเล่น
+       * ⭐️ (ปุ่ม 3 ปุ่ม) ส่ง Text -> รับ MP3
        */
-      async function getAudioAnswer(questionText) {
-          // หยุดเสียงที่เล่นค้าง
-          audioPlayer.pause();
-          audioPlayer.src = '';
+      async function handleButtonPress(button, question) {
+          await stopSpeech(); // หยุดของเก่าก่อน
           
-          // แสดงคำถามบนจอ
-          showSpeechBox(questionText, "AIVA กำลังค้นหาคำตอบ...");
-          
-          // ล็อกปุ่ม
-          micBtn.disabled = true;
-          buttons.forEach(btn => btn.disabled = true);
+          button.disabled = true;
+          buttons.forEach(btn => btn.disabled = true); // ปิดปุ่มอื่นด้วย
 
           try {
-              console.log(`Sending text to backend: ${questionText}`);
-              
-              const response = await fetch('/get_answer_audio', {
+              console.log(`Calling /speak_answer with: ${question}`);
+              const response = await fetch('/speak_answer', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ question: questionText })
+                  body: JSON.stringify({ question })
               });
 
               if (!response.ok) {
                   throw new Error(`Server error: ${response.statusText}`);
               }
-
-              // 5. รับไฟล์เสียงเป็น Blob (Binary Large Object)
-              const audioBlob = await response.blob();
               
-              // 6. สร้าง URL ชั่วคราวสำหรับไฟล์ Blob
-              const audioUrl = URL.createObjectURL(audioBlob);
-              
-              // 7. สั่งให้ Audio Player เล่น
-              audioPlayer.src = audioUrl;
-              audioPlayer.play();
-              
-              showSpeechBox(questionText, "AIVA กำลังพูด..."); // อัปเดตสถานะ
+              playAudioFromResponse(response); // ⭐️ เล่นเสียงที่ได้กลับมา
 
           } catch (error) {
-              console.error('Error getting audio answer:', error);
+              console.error('Error in handleButtonPress:', error);
               showSpeechBox("เกิดข้อผิดพลาด", error.message);
-              resetUI();
+          } finally {
+              setTimeout(resetUI, 1000); // คืนค่าปุ่ม
           }
       }
 
       /**
-       * ⭐️ 8. ฟังก์ชันเริ่มการฟังเสียง (จาก Web Speech API)
+       * ⭐️ (ปุ่มไมค์) ฟังเสียง -> ส่ง Text -> รับ MP3
        */
       function startVoiceListen() {
-          if (!recognition) return;
+          if (!recognition) {
+              showSpeechBox("ขออภัย", "เบราว์เซอร์ของคุณไม่รองรับการพูด");
+              return;
+          }
 
-          // หยุดเสียงที่เล่นค้าง
-          audioPlayer.pause();
-          audioPlayer.src = '';
-          hideSpeechBox();
-          
+          stopSpeech(); // หยุดของเก่าก่อน
+
           micBtn.disabled = true;
-          micBtn.classList.add('active'); // Animation หมุน
+          micBtn.classList.add('active'); 
           loaderMessage.textContent = "กำลังรับฟังเสียงของคุณ...";
-          loader.classList.add('active'); // Overlay
+          loader.classList.add('active'); 
+          hideSpeechBox(); 
+
+          recognition.start(); // ⭐️ เริ่มฟังเสียง (Client-side)
+      }
+      
+      // --- Event Listeners (Web Speech API) ---
+      
+      // ⭐️ เมื่อ Web Speech API ได้ยินผลลัพธ์
+      recognition.onresult = async (event) => {
+          const text = event.results[0][0].transcript;
+          console.log(`Speech recognized: ${text}`);
           
+          // 1. แสดงว่ากำลังประมวลผล
+          loaderMessage.textContent = "กำลังค้นหาคำตอบ...";
+          showSpeechBox(text, "..."); // แสดงคำถาม
+          
+          // 2. ส่ง Text ไปยัง Server
           try {
-              recognition.start();
-          } catch(e) {
-              console.error("Recognition already started.", e);
+              const response = await fetch('/listen', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ text }) // ⭐️ ส่ง Text ที่เราฟังได้
+              });
+
+              if (!response.ok) {
+                   throw new Error(`Server error: ${response.statusText}`);
+              }
+
+              playAudioFromResponse(response); // ⭐️ เล่นเสียงที่ได้กลับมา
+              
+          } catch (error) {
+              console.error('Error in recognition.onresult:', error);
+              showSpeechBox(text, "เกิดข้อผิดพลาดในการเชื่อมต่อ");
+          } finally {
+              setTimeout(resetUI, 500); 
+          }
+      };
+
+      // ⭐️ เมื่อ Web Speech API ฟังไม่เข้าใจ
+      recognition.onerror = (event) => {
+          console.error("Speech recognition error:", event.error);
+          if (event.error === 'no-speech' || event.error === 'audio-capture') {
+              showSpeechBox("AIVA", "ขอโทษค่ะ ฉันไม่ได้ยินเสียงของคุณ");
+          } else {
+              showSpeechBox("AIVA", "เกิดข้อผิดพลาดในการฟังเสียง");
+          }
+          resetUI();
+      };
+      
+      // ⭐️ เมื่อ Web Speech API หยุดทำงาน (ไม่ว่าจะกรณีใด)
+      recognition.onend = () => {
+          if (loader.classList.contains('active')) {
+              // ถ้ายังไม่ได้รับคำตอบ (เช่น กดหยุดเอง)
               resetUI();
           }
-      }
+      };
 
-      /**
-       * ⭐️ 9. ฟังก์ชันหยุดทุกอย่าง
-       */
-      function stopAll() {
-          console.log("Stop button pressed.");
-          if (recognition) {
-              recognition.stop(); // หยุดการจดจำเสียง
-          }
-          audioPlayer.pause(); // หยุดเสียงที่กำลังเล่น
-          audioPlayer.src = '';
-          hideSpeechBox();
-          resetUI();
-      }
-
-      // --- Event Listeners ---
-
-      // ⭐️ 10. เชื่อมปุ่ม 3 ปุ่มหลัก
+      // --- Event Listeners (Buttons) ---
       const questions = [
           'สอบถามรายละเอียดการรับสมัคร',
           'สอบถามเรื่องหลักสูตรที่เปิดสอน',
           'จบไปแล้วทำงานอะไรได้บ้าง'
       ];
-
       buttons.forEach((btn, i) => {
-          btn.addEventListener('click', (e) => {
-              const originalText = e.target.innerText;
-              
-              // แสดง Feedback ที่ปุ่ม
-              e.target.disabled = true;
-              e.target.innerText = 'กำลังพูด...';
-              e.target.style.opacity = '0.7';
-
-              // ส่ง Text ไปเอาเสียง
-              getAudioAnswer(questions[i]);
-              
-              // (เราจะ reset ปุ่มใน 'audioPlayer.onended')
-          });
+          btn.addEventListener('click', () => handleButtonPress(btn, questions[i]));
       });
 
-      // ⭐️ 11. เชื่อมปุ่มไมค์
       micBtn.addEventListener('click', startVoiceListen);
+      stopBtn.addEventListener('click', stopSpeech); // ⭐️ ปุ่มหยุด (Client-side)
       
-      // ⭐️ 12. เชื่อมปุ่มหยุด
-      stopBtn.addEventListener('click', stopAll);
-
-      // --- Event Listeners ของ API ---
-
-      // ⭐️ 13. เมื่อ Audio Player เล่นจบ
-      audioPlayer.addEventListener('ended', () => {
-          console.log("Audio finished playing.");
-          hideSpeechBox();
-          resetUI();
-          
-          // คืนค่าข้อความปุ่ม
-          buttons.forEach((btn, i) => {
-              btn.innerText = questions[i];
-          });
+      // ⭐️ Event Listeners ใหม่สำหรับ Rating ⭐️
+      smileBtn.addEventListener('click', () => {
+        ratingOverlay.classList.add('active');
       });
-
-      // ⭐️ 14. เมื่อ Web Speech API ได้ผลลัพธ์
-      if(recognition) {
-          recognition.addEventListener('result', (event) => {
-              const userText = event.results[0][0].transcript;
-              console.log('User said:', userText);
-              
-              // ได้ข้อความแล้ว, ส่งไปเอาไฟล์เสียง
-              getAudioAnswer(userText);
-          });
+      
+      ratingClose.addEventListener('click', () => {
+        ratingOverlay.classList.remove('active');
+      });
+      
+      const allStars = ratingStars.querySelectorAll('.rating-star');
+      
+      allStars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+          allStars.forEach(s => s.classList.remove('active'));
+          let current = star;
+          while (current) {
+            current.classList.add('active');
+            current = current.previousElementSibling;
+          }
+        });
+        
+        star.addEventListener('click', () => {
+          const rating = star.dataset.value;
+          console.log(`User rated: ${rating} stars`);
           
-          // เมื่อหยุดฟัง (ไม่ว่าจะพูดจบ หรือกดหยุด)
-          recognition.addEventListener('end', () => {
-              console.log("Speech recognition ended.");
-              // ซ่อน Loader (resetUI จะถูกเรียกใน onended ของ audio)
-              loader.classList.remove('active');
-              micBtn.classList.remove('active');
-              // micBtn.disabled จะถูกปลดล็อกโดย onended ของ audio
-          });
-
-          recognition.addEventListener('error', (event) => {
-              console.error('Speech recognition error:', event.error);
-              showSpeechBox("เกิดข้อผิดพลาด", event.error);
-              stopAll(); // หยุดทุกอย่างถ้า error
-          });
-      }
+          allStars.forEach(s => s.classList.remove('selected', 'active'));
+          let current = star;
+          while (current) {
+            current.classList.add('selected');
+            current = current.previousElementSibling;
+          }
+        });
+      });
+      
+      ratingStars.addEventListener('mouseleave', () => {
+        allStars.forEach(s => s.classList.remove('active'));
+      });
       
   });
   </script>
